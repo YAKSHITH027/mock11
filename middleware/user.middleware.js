@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken')
-const protectedAuth = async (req, res, next) => {
+const userAuth = async (req, res, next) => {
   let token = req.headers.authorization
   console.log('token here', token)
   try {
     jwt.verify(token, 'secret', function (err, decoded) {
-      if (decoded.isAdmin) {
+      if (decoded) {
         console.log(decoded) // bar
+        // req.body.userId = decoded.userId
         next()
       } else {
         res.status(400).send({ msg: err })
@@ -16,4 +17,4 @@ const protectedAuth = async (req, res, next) => {
     res.send('login first')
   }
 }
-module.exports = { protectedAuth }
+module.exports = { userAuth }

@@ -12,6 +12,18 @@ booksRoute.get('/:bookId', async (req, res) => {
     res.status(400).send({ msg: 'books not found' })
   }
 })
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: 'something'.
+ *
+ */
+
 booksRoute.get('/', async (req, res) => {
   try {
     const { author, category } = req.query

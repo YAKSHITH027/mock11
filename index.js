@@ -3,6 +3,9 @@ const cors = require('cors')
 const { connection } = require('./db')
 const { userRoute } = require('./router/user.route')
 const { booksRoute } = require('./router/books.route')
+const { orderRoute } = require('./router/order.route')
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsdoc = require('swagger-jsdoc')
 require('dotenv').config()
 const app = express()
 
@@ -15,7 +18,28 @@ app.get('/', (req, res) => {
 })
 app.use('/user', userRoute)
 app.use('/books', booksRoute)
+app.use('/order', orderRoute)
 // console.log(process.env)
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'bookstore app',
+      version: '1.0.0',
+    },
+    servers: [
+      {
+        url: 'https://jade-sparkling-rabbit.cyclic.app',
+      },
+    ],
+  },
+  apis: ['./route*.js'], // files containing annotations as above
+}
+
+const openapiSpecification = swaggerJsdoc(options)
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
+
 app.listen(8080, async () => {
   try {
     await connection
